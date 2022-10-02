@@ -6,6 +6,7 @@ import {
 } from '@expo-google-fonts/nunito';
 import theme from '@theme/index';
 import { Home } from '@screens/Home';
+import { StatusBar } from 'expo-status-bar';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -19,6 +20,7 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
+      <StatusBar />
       <Home />
     </ThemeProvider>
   );

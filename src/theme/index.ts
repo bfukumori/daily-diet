@@ -2,13 +2,13 @@ export default {
   COLORS: {
     white: '#FFFFFF',
 
-    'gray-1': '#1B1D1E',
-    'gray-2': '#333638',
-    'gray-3': '#5C6265',
-    'gray-4': '#B9BBBC',
-    'gray-5': '#DDDEDF',
-    'gray-6': '#EFF0F0',
-    'gray-7': '#FAFAFA',
+    'gray-100': '#1B1D1E',
+    'gray-200': '#333638',
+    'gray-300': '#5C6265',
+    'gray-400': '#B9BBBC',
+    'gray-500': '#DDDEDF',
+    'gray-600': '#EFF0F0',
+    'gray-700': '#FAFAFA',
 
     'green-light': '#E5F0DB',
     'green-mid': '#CBE4B4',
@@ -25,8 +25,10 @@ export default {
   },
 
   FONT_SIZE: {
-    SM: '12px',
-    MD: '14px',
-    LG: '16px',
+    XS: '12px',
+    SM: '14px',
+    MD: '16px',
+    LG: '18px',
+    XL: '32px',
   },
-};
+} as const;
