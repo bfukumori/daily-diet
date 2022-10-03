@@ -1,3 +1,4 @@
+import { Variant } from '@screens/Home';
 import {
   Container,
   Content,
@@ -10,10 +11,10 @@ import {
 type Props = {
   title: string;
   time: string;
-  variant?: 'primary' | 'secondary';
+  variant: Variant;
 };
 
-export function ListItem({ title, time, variant = 'primary' }: Props) {
+export function ListItem({ title, time, variant }: Props) {
   return (
     <Container>
       <Content>

@@ -1,15 +1,26 @@
+import { useEffect, useState } from 'react';
 import { Image, SectionList } from 'react-native';
-import { Plus } from 'phosphor-react-native';
 import { useTheme } from 'styled-components/native';
-import { Container, Header, HeaderTitle, Profile, Title } from './styles';
+import { Plus } from 'phosphor-react-native';
 import logo from '@assets/logo.png';
 import { Statistics } from '@components/Statistics';
 import { Button } from '@components/Button';
 import { ListItem } from '@components/ListItem';
+import { formatPercentage } from '@utils/formatPercentage';
+import { RootStackScreenProps } from 'src/@types/navigation';
+import { Container, Header, HeaderTitle, Profile, Title } from './styles';
 
-export function Home() {
+export interface DataProps {
+  title: string;
+  data: { title: string; time: string; diet: boolean }[];
+}
+
+export type Variant = 'inDiet' | 'outDiet';
+
+export function Home({ navigation }: RootStackScreenProps<'Home'>) {
+  const [variant, setVariant] = useState<Variant>('inDiet');
   const { COLORS } = useTheme();
-  const DATA = [
+  const DATA: DataProps[] = [
     {
       title: '12.08.22',
       data: [
@@ -30,6 +41,30 @@ export function Home() {
       ],
     },
   ];
+
+  const totalMeals = DATA.map((meal) => meal.data).flat();
+  const mealsInDiet = totalMeals.filter((meal) => meal.diet);
+  const percentageInDiet = mealsInDiet.length / totalMeals.length;
+  const formattedPercentageInDiet = formatPercentage(
+    mealsInDiet.length,
+    totalMeals.length
+  );
+
+  function handleGoToStatisticsPage() {
+    navigation.navigate('Statistics', {
+      variant,
+      data: DATA,
+    });
+  }
+
+  useEffect(() => {
+    if (percentageInDiet <= 0.5) {
+      setVariant('outDiet');
+    } else {
+      setVariant('inDiet');
+    }
+  }, [percentageInDiet]);
+
   return (
     <Container>
       <Header>
@@ -40,7 +75,12 @@ export function Home() {
           }}
         />
       </Header>
-      <Statistics value='90,86%' text='das refeições dentro da dieta' />
+      <Statistics
+        value={formattedPercentageInDiet}
+        text='das refeições dentro da dieta'
+        onPress={handleGoToStatisticsPage}
+        variant={variant}
+      />
       <Title>Refeições</Title>
       <Button
         title='Nova refeição'
@@ -53,7 +93,7 @@ export function Home() {
           <ListItem
             title={item.title}
             time={item.time}
-            variant={item.diet ? 'primary' : 'secondary'}
+            variant={item.diet ? 'inDiet' : 'outDiet'}
           />
         )}
         renderSectionHeader={({ section: { title } }) => (

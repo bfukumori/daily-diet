@@ -1,15 +1,19 @@
+import { Variant } from '@screens/Home';
 import { ArrowUpRight } from 'phosphor-react-native';
+import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import styled, { css } from 'styled-components/native';
 
 type Props = {
-  variant: 'primary' | 'secondary';
+  variant: Variant;
 };
 
-export const Container = styled.View<Props>`
+export const Container = styled(
+  TouchableOpacity as new (props: TouchableOpacityProps) => TouchableOpacity
+)<Props>`
   width: 100%;
   padding: 20px 16px;
   background-color: ${({ theme, variant }) =>
-    variant === 'primary'
+    variant === 'inDiet'
       ? theme.COLORS['green-light']
       : theme.COLORS['red-light']};
   border-radius: 8px;
@@ -21,7 +25,7 @@ export const StyledIcon = styled(ArrowUpRight).attrs<Props>(
   ({ theme, variant }) => ({
     size: 24,
     color:
-      variant === 'primary'
+      variant === 'inDiet'
         ? theme.COLORS['green-dark']
         : theme.COLORS['red-dark'],
   })
@@ -34,7 +38,7 @@ export const StyledIcon = styled(ArrowUpRight).attrs<Props>(
 export const StyledNumber = styled.Text`
   ${({ theme }) => css`
     font-family: ${theme.FONT_FAMILY.bold};
-    font-size: ${theme.FONT_SIZE.XL};
+    font-size: ${theme.FONT_SIZE['2XL']};
     color: ${theme.COLORS['gray-100']};
   `}
 `;

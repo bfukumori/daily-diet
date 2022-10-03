@@ -1,14 +1,16 @@
+import { Variant } from '@screens/Home';
+import { TouchableOpacityProps } from 'react-native';
 import { Container, StyledIcon, StyledNumber, StyledText } from './styles';
 
-type Props = {
+type Props = TouchableOpacityProps & {
   value: string;
   text: string;
-  variant?: 'primary' | 'secondary';
+  variant: Variant;
 };
 
-export function Statistics({ value, text, variant = 'primary' }: Props) {
+export function Statistics({ value, text, variant, ...rest }: Props) {
   return (
-    <Container variant={variant}>
+    <Container variant={variant} {...rest}>
       <StyledIcon variant={variant} />
       <StyledNumber>{value}</StyledNumber>
       <StyledText>{text}</StyledText>

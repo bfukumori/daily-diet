@@ -1,7 +1,8 @@
+import { Variant } from '@screens/Home';
 import styled, { css } from 'styled-components/native';
 
 type Props = {
-  variant: 'primary' | 'secondary';
+  variant: Variant;
 };
 
 export const Container = styled.View`
@@ -48,7 +49,5 @@ export const Icon = styled.View<Props>`
   height: 14px;
   border-radius: 7px;
   background-color: ${({ theme, variant }) =>
-    variant === 'primary'
-      ? theme.COLORS['green-mid']
-      : theme.COLORS['red-mid']};
+    variant === 'inDiet' ? theme.COLORS['green-mid'] : theme.COLORS['red-mid']};
 `;

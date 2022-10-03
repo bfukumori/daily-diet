@@ -5,8 +5,8 @@ import {
   Nunito_700Bold,
 } from '@expo-google-fonts/nunito';
 import theme from '@theme/index';
-import { Home } from '@screens/Home';
 import { StatusBar } from 'expo-status-bar';
+import { Routes } from '@routes/index';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -20,8 +20,8 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <StatusBar />
-      <Home />
+      <StatusBar translucent style='dark' />
+      <Routes />
     </ThemeProvider>
   );
 }

@@ -29,6 +29,7 @@ export default {
     SM: '14px',
     MD: '16px',
     LG: '18px',
-    XL: '32px',
+    XL: '24px',
+    '2XL': '32px',
   },
 } as const;
