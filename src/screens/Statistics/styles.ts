@@ -1,11 +1,11 @@
-import styled, { css } from 'styled-components/native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ArrowLeft } from 'phosphor-react-native';
 import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
-import { Variant } from '@screens/Home';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import styled, { css } from 'styled-components/native';
+import { ArrowLeft } from 'phosphor-react-native';
+import { DietVariant } from '@screens/Home';
 
 type Props = {
-  variant: Variant;
+  variant: DietVariant;
 };
 
 export const Container = styled(SafeAreaView)<Props>`
@@ -64,7 +64,7 @@ export const StyledText = styled.Text`
 
 export const Content = styled.View`
   flex: 1;
-  padding: 0 24px;
+  padding: 33px 24px;
   background-color: ${({ theme }) => theme.COLORS['gray-700']};
   border-top-right-radius: 20px;
   border-top-left-radius: 20px;
@@ -76,7 +76,6 @@ export const Title = styled.Text`
     font-size: ${theme.FONT_SIZE.SM};
     color: ${theme.COLORS['gray-100']};
   `}
-  margin-top:33px;
   margin-bottom: 23px;
   text-align: center;
 `;

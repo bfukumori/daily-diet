@@ -1,10 +1,10 @@
-import { Variant } from '@screens/Home';
 import { ArrowUpRight } from 'phosphor-react-native';
 import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import styled, { css } from 'styled-components/native';
+import { Variant } from '.';
 
 type Props = {
-  variant: Variant;
+  variant?: Variant;
 };
 
 export const Container = styled(
@@ -13,9 +13,11 @@ export const Container = styled(
   width: 100%;
   padding: 20px 16px;
   background-color: ${({ theme, variant }) =>
-    variant === 'inDiet'
-      ? theme.COLORS['green-light']
-      : theme.COLORS['red-light']};
+    variant
+      ? variant === 'inDiet'
+        ? theme.COLORS['green-light']
+        : theme.COLORS['red-light']
+      : theme.COLORS['gray-600']};
   border-radius: 8px;
   align-items: center;
   position: relative;

@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components/native';
 export const Container = styled(SafeAreaView)`
   flex: 1;
   background-color: ${({ theme }) => theme.COLORS['gray-700']};
-  padding: 33px 24px;
+  padding: 0 24px;
 `;
 
 export const Header = styled.View`
@@ -12,7 +12,7 @@ export const Header = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 36px;
+  padding: 33px 0;
 `;
 
 export const Profile = styled.Image`
@@ -32,7 +32,7 @@ export const Title = styled.Text`
   margin-bottom: 8px;
 `;
 
-export const HeaderTitle = styled.Text`
+export const ListHeaderTitle = styled.Text`
   ${({ theme }) => css`
     font-family: ${theme.FONT_FAMILY.bold};
     font-size: ${theme.FONT_SIZE.LG};

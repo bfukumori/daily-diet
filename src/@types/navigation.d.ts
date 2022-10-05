@@ -1,12 +1,15 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { DataProps, Variant } from '@screens/Home';
+import { DataProps, DietVariant } from '@screens/Home';
 
 export type RootStackParamList = {
   Home: undefined;
   Statistics: {
-    variant: Variant;
+    diet: DietVariant;
     data: DataProps[];
   };
+  CreateMeal: undefined;
+  Feedback: { variant: DietVariant };
+  Meal: undefined;
 };
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> =

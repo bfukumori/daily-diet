@@ -17,24 +17,27 @@ export function Statistics({
   route,
   navigation,
 }: RootStackScreenProps<'Statistics'>) {
-  const { variant, data } = route.params;
+  const { diet, data } = route.params;
 
-  const totalMeals = data.map((meal) => meal.data).flat();
-  const mealsInDiet = totalMeals.filter((meal) => meal.diet);
-  const mealsOutDiet = totalMeals.length - mealsInDiet.length;
+  const meals = data.map((meal) => meal.data).flat();
+
+  const totalMeals = meals.length;
+  const totalMealsInDiet = meals.filter((meal) => meal.diet).length;
+  const totalMealsOutDiet = meals.length - totalMealsInDiet;
+
   const formattedPercentageInDiet = formatPercentage(
-    mealsInDiet.length,
-    totalMeals.length
+    totalMealsInDiet,
+    totalMeals
   );
 
   function handleGoBack() {
     navigation.goBack();
   }
   return (
-    <Container variant={variant}>
-      <Header variant={variant}>
+    <Container variant={diet}>
+      <Header variant={diet}>
         <IconContainer onPress={handleGoBack}>
-          <StyledIcon variant={variant} />
+          <StyledIcon variant={diet} />
         </IconContainer>
         <StyledNumber>{formattedPercentageInDiet}</StyledNumber>
         <StyledText>das refeições dentro da dieta</StyledText>
@@ -45,19 +48,16 @@ export function Statistics({
           value={22}
           title='melhor sequência de pratos dentro da dieta'
         />
-        <StatisticsBoxes
-          value={totalMeals.length}
-          title='refeições registradas'
-        />
+        <StatisticsBoxes value={totalMeals} title='refeições registradas' />
         <BoxesContainer>
           <StatisticsBoxes
             variant='inDiet'
-            value={mealsInDiet.length}
+            value={totalMealsInDiet}
             title='refeições dentro da dieta'
           />
           <StatisticsBoxes
             variant='outDiet'
-            value={mealsOutDiet}
+            value={totalMealsOutDiet}
             title='refeições fora da dieta'
           />
         </BoxesContainer>

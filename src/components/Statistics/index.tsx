@@ -1,17 +1,18 @@
-import { Variant } from '@screens/Home';
 import { TouchableOpacityProps } from 'react-native';
 import { Container, StyledIcon, StyledNumber, StyledText } from './styles';
+
+export type Variant = 'inDiet' | 'outDiet';
 
 type Props = TouchableOpacityProps & {
   value: string;
   text: string;
-  variant: Variant;
+  variant?: Variant;
 };
 
 export function Statistics({ value, text, variant, ...rest }: Props) {
   return (
     <Container variant={variant} {...rest}>
-      <StyledIcon variant={variant} />
+      {variant && <StyledIcon variant={variant} />}
       <StyledNumber>{value}</StyledNumber>
       <StyledText>{text}</StyledText>
     </Container>

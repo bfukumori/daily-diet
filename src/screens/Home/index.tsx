@@ -1,24 +1,24 @@
 import { useEffect, useState } from 'react';
 import { Image, SectionList } from 'react-native';
 import { useTheme } from 'styled-components/native';
+import { RootStackScreenProps } from 'src/@types/navigation';
+import { formatPercentage } from '@utils/formatPercentage';
 import { Plus } from 'phosphor-react-native';
 import logo from '@assets/logo.png';
+import { Container, Header, ListHeaderTitle, Profile, Title } from './styles';
 import { Statistics } from '@components/Statistics';
 import { Button } from '@components/Button';
 import { ListItem } from '@components/ListItem';
-import { formatPercentage } from '@utils/formatPercentage';
-import { RootStackScreenProps } from 'src/@types/navigation';
-import { Container, Header, HeaderTitle, Profile, Title } from './styles';
 
 export interface DataProps {
   title: string;
   data: { title: string; time: string; diet: boolean }[];
 }
 
-export type Variant = 'inDiet' | 'outDiet';
+export type DietVariant = 'inDiet' | 'outDiet';
 
 export function Home({ navigation }: RootStackScreenProps<'Home'>) {
-  const [variant, setVariant] = useState<Variant>('inDiet');
+  const [diet, setDiet] = useState<DietVariant>('inDiet');
   const { COLORS } = useTheme();
   const DATA: DataProps[] = [
     {
@@ -42,26 +42,34 @@ export function Home({ navigation }: RootStackScreenProps<'Home'>) {
     },
   ];
 
-  const totalMeals = DATA.map((meal) => meal.data).flat();
-  const mealsInDiet = totalMeals.filter((meal) => meal.diet);
-  const percentageInDiet = mealsInDiet.length / totalMeals.length;
+  const meals = DATA.map((meal) => meal.data).flat();
+
+  const totalMealsInDiet = meals.filter((meal) => meal.diet).length;
+  const totalMeals = meals.length;
+
+  const percentageInDiet = totalMealsInDiet / totalMeals;
+
   const formattedPercentageInDiet = formatPercentage(
-    mealsInDiet.length,
-    totalMeals.length
+    totalMealsInDiet,
+    totalMeals
   );
 
-  function handleGoToStatisticsPage() {
+  function handleGoToStatisticsScreen() {
     navigation.navigate('Statistics', {
-      variant,
+      diet,
       data: DATA,
     });
   }
 
+  function handleCreateMeal() {
+    navigation.navigate('CreateMeal');
+  }
+
   useEffect(() => {
     if (percentageInDiet <= 0.5) {
-      setVariant('outDiet');
+      setDiet('outDiet');
     } else {
-      setVariant('inDiet');
+      setDiet('inDiet');
     }
   }, [percentageInDiet]);
 
@@ -78,29 +86,31 @@ export function Home({ navigation }: RootStackScreenProps<'Home'>) {
       <Statistics
         value={formattedPercentageInDiet}
         text='das refeições dentro da dieta'
-        onPress={handleGoToStatisticsPage}
-        variant={variant}
+        onPress={handleGoToStatisticsScreen}
+        variant={diet}
       />
       <Title>Refeições</Title>
       <Button
         title='Nova refeição'
         icon={<Plus size={18} color={COLORS.white} />}
+        onPress={handleCreateMeal}
       />
       <SectionList
         sections={DATA}
-        keyExtractor={(item, index) => item.title + index}
-        renderItem={({ item }) => (
+        keyExtractor={(meal, index) => meal.title + index}
+        renderItem={({ item: meal }) => (
           <ListItem
-            title={item.title}
-            time={item.time}
-            variant={item.diet ? 'inDiet' : 'outDiet'}
+            title={meal.title}
+            time={meal.time}
+            variant={meal.diet ? 'inDiet' : 'outDiet'}
           />
         )}
         renderSectionHeader={({ section: { title } }) => (
-          <HeaderTitle>{title}</HeaderTitle>
+          <ListHeaderTitle>{title}</ListHeaderTitle>
         )}
         showsVerticalScrollIndicator={false}
         fadingEdgeLength={1000}
+        contentContainerStyle={{ paddingBottom: 90 }}
       />
     </Container>
   );

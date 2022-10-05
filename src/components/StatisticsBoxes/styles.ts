@@ -1,16 +1,19 @@
-import { Variant } from '@screens/Home';
+import { DietVariant } from '@screens/Home';
 import styled, { css } from 'styled-components/native';
 
 type Props = {
-  variant: 'neutral' | Variant;
+  variant?: DietVariant;
 };
 
 export const Container = styled.View<Props>`
   ${({ theme, variant }) => css`
-    background-color: ${(variant === 'neutral' && theme.COLORS['gray-600']) ||
-    (variant === 'inDiet' && theme.COLORS['green-light']) ||
-    (variant === 'outDiet' && theme.COLORS['red-light'])};
-    flex: ${variant === 'neutral' ? 'none' : '1'};
+    background-color: ${variant
+      ? variant === 'inDiet'
+        ? theme.COLORS['green-light']
+        : theme.COLORS['red-light']
+      : theme.COLORS['gray-600']};
+
+    flex: ${!!variant ? 1 : 'none'};
     margin-left: ${variant === 'outDiet' ? '12px' : 0};
   `}
 
@@ -36,4 +39,5 @@ export const StyledText = styled.Text`
     font-size: ${theme.FONT_SIZE.SM};
     color: ${theme.COLORS['gray-200']};
   `}
+  text-align: center
 `;
