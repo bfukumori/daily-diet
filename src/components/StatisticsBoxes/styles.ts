@@ -27,7 +27,7 @@ export const Container = styled.View<Props>`
 export const StyledNumber = styled.Text`
   ${({ theme }) => css`
     font-family: ${theme.FONT_FAMILY.bold};
-    font-size: ${theme.FONT_SIZE.XL};
+    font-size: ${theme.FONT_SIZE['2MD']};
     color: ${theme.COLORS['gray-100']};
   `}
   margin-bottom:8px

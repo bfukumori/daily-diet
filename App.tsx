@@ -20,7 +20,7 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <StatusBar translucent style='dark' />
+      <StatusBar style='dark' translucent />
       <Routes />
     </ThemeProvider>
   );

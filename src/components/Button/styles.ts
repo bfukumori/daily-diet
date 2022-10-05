@@ -1,7 +1,9 @@
 import styled, { css } from 'styled-components/native';
 import { ButtonType } from '.';
 
-type Props = { variant: ButtonType };
+type Props = { variant: ButtonType } & {
+  hasIcon?: boolean;
+};
 
 export const Container = styled.TouchableOpacity<Props>`
   ${({ theme, variant }) => css`
@@ -9,7 +11,7 @@ export const Container = styled.TouchableOpacity<Props>`
       ? theme.COLORS['gray-200']
       : 'transparent'};
     border: 1px solid
-      ${variant === 'light' ? 'transparent' : theme.COLORS['gray-100']};
+      ${variant === 'dark' ? 'transparent' : theme.COLORS['gray-100']};
   `}
   padding: 16px 24px;
   border-radius: 6px;
@@ -19,12 +21,12 @@ export const Container = styled.TouchableOpacity<Props>`
 `;
 
 export const Title = styled.Text<Props>`
-  ${({ theme, variant }) => css`
+  ${({ theme, variant, hasIcon }) => css`
     color: ${variant === 'dark'
       ? theme.COLORS.white
       : theme.COLORS['gray-100']};
     font-family: ${theme.FONT_FAMILY.bold};
     font-size: ${theme.FONT_SIZE.SM};
+    margin-left: ${hasIcon ? '12px' : 0};
   `}
-  margin-left: 12px;
 `;

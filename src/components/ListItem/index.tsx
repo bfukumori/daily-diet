@@ -1,4 +1,5 @@
-import { Variant } from '@screens/Home';
+import { DietVariant } from '@screens/Home';
+import { TouchableOpacityProps } from 'react-native';
 import {
   Container,
   Content,
@@ -8,15 +9,15 @@ import {
   Description,
 } from './styles';
 
-type Props = {
+type Props = TouchableOpacityProps & {
   title: string;
   time: string;
-  variant: Variant;
+  variant: DietVariant;
 };
 
-export function ListItem({ title, time, variant }: Props) {
+export function ListItem({ title, time, variant, ...rest }: Props) {
   return (
-    <Container>
+    <Container {...rest}>
       <Content>
         <Time>{time}</Time>
         <Separator />

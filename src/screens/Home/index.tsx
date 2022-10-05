@@ -9,13 +9,21 @@ import { Container, Header, ListHeaderTitle, Profile, Title } from './styles';
 import { Statistics } from '@components/Statistics';
 import { Button } from '@components/Button';
 import { ListItem } from '@components/ListItem';
+import { formatDate } from '@utils/formatDate';
+
+export type DietVariant = 'inDiet' | 'outDiet';
+
+export type Meal = {
+  title: string;
+  date: number;
+  description: string;
+  diet: boolean;
+};
 
 export interface DataProps {
   title: string;
-  data: { title: string; time: string; diet: boolean }[];
+  data: Meal[];
 }
-
-export type DietVariant = 'inDiet' | 'outDiet';
 
 export function Home({ navigation }: RootStackScreenProps<'Home'>) {
   const [diet, setDiet] = useState<DietVariant>('inDiet');
@@ -24,20 +32,52 @@ export function Home({ navigation }: RootStackScreenProps<'Home'>) {
     {
       title: '12.08.22',
       data: [
-        { title: 'X-tudo', time: '08:00', diet: false },
-        { title: 'Whey protein', time: '16:00', diet: true },
-        { title: 'Salada ceasar', time: '09:30', diet: true },
+        {
+          title: 'X-tudo',
+          description: 'loremloremrmeomroemoemro',
+          date: new Date().getTime(),
+          diet: true,
+        },
+        {
+          title: 'X-tudo',
+          description: 'loremloremrmeomroemoemro',
+          date: new Date().getTime(),
+          diet: true,
+        },
+        {
+          title: 'X-tudo',
+          description: 'loremloremrmeomroemoemro',
+          date: new Date().getTime(),
+          diet: true,
+        },
       ],
     },
     {
       title: '11.08.22',
-      data: [{ title: 'Vitamina de banana', time: '20:00', diet: true }],
+      data: [
+        {
+          title: 'X-tudo',
+          description: 'loremloremrmeomroemoemro',
+          date: new Date().getTime(),
+          diet: true,
+        },
+      ],
     },
     {
       title: '10.08.22',
       data: [
-        { title: 'Wrap', time: '12:30', diet: true },
-        { title: 'McDonalds', time: '11:25', diet: false },
+        {
+          title: 'X-tudo',
+          description: 'loremloremrmeomroemoemro',
+          date: new Date().getTime(),
+          diet: false,
+        },
+        {
+          title: 'X-tudo',
+          description: 'loremloremrmeomroemoemro',
+          date: new Date().getTime(),
+          diet: false,
+        },
       ],
     },
   ];
@@ -63,6 +103,10 @@ export function Home({ navigation }: RootStackScreenProps<'Home'>) {
 
   function handleCreateMeal() {
     navigation.navigate('CreateMeal');
+  }
+
+  function handleGoToMealScreen(meal: Meal) {
+    navigation.navigate('Meal', { meal });
   }
 
   useEffect(() => {
@@ -101,8 +145,9 @@ export function Home({ navigation }: RootStackScreenProps<'Home'>) {
         renderItem={({ item: meal }) => (
           <ListItem
             title={meal.title}
-            time={meal.time}
+            time={formatDate(meal.date, 'time')}
             variant={meal.diet ? 'inDiet' : 'outDiet'}
+            onPress={() => handleGoToMealScreen(meal)}
           />
         )}
         renderSectionHeader={({ section: { title } }) => (

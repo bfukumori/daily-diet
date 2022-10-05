@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Container,
   OptionIcon,
@@ -12,15 +12,22 @@ type Props = {
   title: string;
   options: string[];
   onSelect: (option: string) => void;
+  prevValue?: string;
 };
 
-export function Radio({ title, options, onSelect }: Props) {
+export function Radio({ title, options, onSelect, prevValue }: Props) {
   const [userOption, setUserOption] = useState<string | null>(null);
 
   function handleUserOption(option: string) {
     onSelect(option);
     setUserOption(option);
   }
+
+  useEffect(() => {
+    if (prevValue) {
+      setUserOption(prevValue);
+    }
+  }, [prevValue]);
 
   return (
     <Container>

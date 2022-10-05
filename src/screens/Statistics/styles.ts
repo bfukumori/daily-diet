@@ -49,7 +49,7 @@ export const StyledIcon = styled(ArrowLeft).attrs<Props>(
 export const StyledNumber = styled.Text`
   ${({ theme }) => css`
     font-family: ${theme.FONT_FAMILY.bold};
-    font-size: ${theme.FONT_SIZE['2XL']};
+    font-size: ${theme.FONT_SIZE['2MD']};
     color: ${theme.COLORS['gray-100']};
   `}
 `;

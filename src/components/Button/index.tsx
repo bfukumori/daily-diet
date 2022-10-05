@@ -13,7 +13,9 @@ export function Button({ title, icon, variant = 'dark', ...rest }: Props) {
   return (
     <Container variant={variant} {...rest}>
       {icon}
-      <Title variant={variant}>{title}</Title>
+      <Title variant={variant} hasIcon={!!icon}>
+        {title}
+      </Title>
     </Container>
   );
 }

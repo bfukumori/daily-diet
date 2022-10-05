@@ -1,11 +1,14 @@
-import { Variant } from '@screens/Home';
+import { DietVariant } from '@screens/Home';
+import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import styled, { css } from 'styled-components/native';
 
 type Props = {
-  variant: Variant;
+  variant: DietVariant;
 };
 
-export const Container = styled.View`
+export const Container = styled(
+  TouchableOpacity as new (props: TouchableOpacityProps) => TouchableOpacity
+)`
   width: 100%;
   padding: 14px 16px;
   border-radius: 6px;

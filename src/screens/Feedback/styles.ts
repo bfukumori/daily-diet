@@ -20,7 +20,7 @@ export const Heading = styled.Text<Props>`
       ? theme.COLORS['green-dark']
       : theme.COLORS['red-dark']};
     font-family: ${theme.FONT_FAMILY.bold};
-    font-size: ${theme.FONT_SIZE.XL};
+    font-size: ${theme.FONT_SIZE['2MD']};
   `}
   margin-bottom: 8px;
 `;
