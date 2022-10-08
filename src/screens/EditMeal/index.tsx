@@ -17,6 +17,8 @@ import { Input } from '@components/Input';
 import { Radio } from '@components/Radio';
 import { formatDate } from '@utils/formatDate';
 import { Button } from '@components/Button';
+import { AppError } from '@utils/AppError';
+import { editMeal } from '@storage/meals/editMeal';
 
 export function EditMeal({
   navigation,
@@ -28,14 +30,14 @@ export function EditMeal({
   const [dietOption, setDietOption] = useState<string>(
     meal.diet ? 'Sim' : 'Não'
   );
-  const [date, setDate] = useState<number | undefined>(meal.date);
+  const [date, setDate] = useState<number>(meal.date);
 
   function handleDietOption(option: string) {
     setDietOption(option);
   }
 
   function onChange(event: DateTimePickerEvent, selectedDate?: Date) {
-    const formatedDate = selectedDate?.getTime();
+    const formatedDate = selectedDate!.getTime();
     setDate(formatedDate);
   }
 
@@ -48,7 +50,7 @@ export function EditMeal({
     });
   }
 
-  function handleEditMeal() {
+  async function handleEditMeal() {
     if (mealName.trim().length === 0 || mealDescription.trim().length === 0) {
       return Alert.alert('Nova Refeição', 'Preencha o nome e a descrição.');
     }
@@ -59,15 +61,23 @@ export function EditMeal({
       );
     }
     const updatedMeal = {
-      mealName,
-      mealDescription,
+      id: meal.id,
+      title: mealName,
+      description: mealDescription,
       date: date,
       diet: dietOption === 'Sim' ? true : false,
     };
 
-    navigation.navigate('Feedback', {
-      variant: dietOption === 'Sim' ? 'inDiet' : 'outDiet',
-    });
+    try {
+      await editMeal(meal.id, meal.date, updatedMeal);
+      navigation.navigate('Meal', { meal: updatedMeal });
+    } catch (error) {
+      if (error instanceof AppError) {
+        Alert.alert('Editar', error.message);
+      } else {
+        Alert.alert('Editar', 'Não foi possível editar a refeição.');
+      }
+    }
   }
 
   return (
