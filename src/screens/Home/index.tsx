@@ -14,6 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MEAL_COLLECTION } from '@storage/storageConfig';
 import { AppError } from '@utils/AppError';
 import { useFocusEffect } from '@react-navigation/native';
+import { EmptyList } from '@components/EmptyList';
 
 export type DietVariant = 'inDiet' | 'outDiet';
 
@@ -138,6 +139,7 @@ export function Home({ navigation }: RootStackScreenProps<'Home'>) {
         )}
         showsVerticalScrollIndicator={false}
         fadingEdgeLength={300}
+        ListEmptyComponent={EmptyList}
       />
     </Container>
   );
