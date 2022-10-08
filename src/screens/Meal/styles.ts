@@ -95,5 +95,7 @@ export const Footer = styled.View`
 
 export const ButtonContainer = styled.View`
   flex-direction: row;
+  align-items: center;
+  justify-content: center;
   width: 100%;
 `;

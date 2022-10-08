@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Image, SectionList } from 'react-native';
+import { useEffect, useState, useCallback } from 'react';
+import { Image, SectionList, Alert } from 'react-native';
 import { useTheme } from 'styled-components/native';
 import { RootStackScreenProps } from 'src/@types/navigation';
 import { formatPercentage } from '@utils/formatPercentage';
@@ -10,10 +10,15 @@ import { Statistics } from '@components/Statistics';
 import { Button } from '@components/Button';
 import { ListItem } from '@components/ListItem';
 import { formatDate } from '@utils/formatDate';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { MEAL_COLLECTION } from '@storage/storageConfig';
+import { AppError } from '@utils/AppError';
+import { useFocusEffect } from '@react-navigation/native';
 
 export type DietVariant = 'inDiet' | 'outDiet';
 
 export type Meal = {
+  id: string;
   title: string;
   date: number;
   description: string;
@@ -26,63 +31,11 @@ export interface DataProps {
 }
 
 export function Home({ navigation }: RootStackScreenProps<'Home'>) {
+  const [data, setData] = useState<DataProps[]>([]);
   const [diet, setDiet] = useState<DietVariant>('inDiet');
   const { COLORS } = useTheme();
-  const DATA: DataProps[] = [
-    {
-      title: '12.08.22',
-      data: [
-        {
-          title: 'X-tudo',
-          description: 'loremloremrmeomroemoemro',
-          date: new Date().getTime(),
-          diet: true,
-        },
-        {
-          title: 'X-tudo',
-          description: 'loremloremrmeomroemoemro',
-          date: new Date().getTime(),
-          diet: true,
-        },
-        {
-          title: 'X-tudo',
-          description: 'loremloremrmeomroemoemro',
-          date: new Date().getTime(),
-          diet: true,
-        },
-      ],
-    },
-    {
-      title: '11.08.22',
-      data: [
-        {
-          title: 'X-tudo',
-          description: 'loremloremrmeomroemoemro',
-          date: new Date().getTime(),
-          diet: true,
-        },
-      ],
-    },
-    {
-      title: '10.08.22',
-      data: [
-        {
-          title: 'X-tudo',
-          description: 'loremloremrmeomroemoemro',
-          date: new Date().getTime(),
-          diet: false,
-        },
-        {
-          title: 'X-tudo',
-          description: 'loremloremrmeomroemoemro',
-          date: new Date().getTime(),
-          diet: false,
-        },
-      ],
-    },
-  ];
 
-  const meals = DATA.map((meal) => meal.data).flat();
+  const meals = data.map((meal) => meal.data).flat();
 
   const totalMealsInDiet = meals.filter((meal) => meal.diet).length;
   const totalMeals = meals.length;
@@ -97,7 +50,7 @@ export function Home({ navigation }: RootStackScreenProps<'Home'>) {
   function handleGoToStatisticsScreen() {
     navigation.navigate('Statistics', {
       diet,
-      data: DATA,
+      data,
     });
   }
 
@@ -117,6 +70,36 @@ export function Home({ navigation }: RootStackScreenProps<'Home'>) {
     }
   }, [percentageInDiet]);
 
+  useFocusEffect(
+    useCallback(() => {
+      async function fetchMeals() {
+        try {
+          const storageData = await AsyncStorage.getItem(MEAL_COLLECTION);
+          const parsedData = storageData ? JSON.parse(storageData) : [];
+          setData(parsedData);
+        } catch (error) {
+          if (error instanceof AppError) {
+            Alert.alert('Dados', error.message);
+          } else {
+            console.log(error);
+            Alert.alert('Dados', 'Não foi possível recuperar os dados.');
+          }
+        }
+      }
+      fetchMeals();
+    }, [])
+  );
+
+  // const clearAll = async () => {
+  //   try {
+  //     await AsyncStorage.clear();
+  //   } catch (e) {
+  //     // clear error
+  //   }
+
+  //   console.log('Done.');
+  // };
+  // clearAll();
   return (
     <Container>
       <Header>
@@ -128,7 +111,7 @@ export function Home({ navigation }: RootStackScreenProps<'Home'>) {
         />
       </Header>
       <Statistics
-        value={formattedPercentageInDiet}
+        value={totalMeals > 0 ? formattedPercentageInDiet : '0,00%'}
         text='das refeições dentro da dieta'
         onPress={handleGoToStatisticsScreen}
         variant={diet}
@@ -140,7 +123,7 @@ export function Home({ navigation }: RootStackScreenProps<'Home'>) {
         onPress={handleCreateMeal}
       />
       <SectionList
-        sections={DATA}
+        sections={data}
         keyExtractor={(meal, index) => meal.title + index}
         renderItem={({ item: meal }) => (
           <ListItem
@@ -154,8 +137,7 @@ export function Home({ navigation }: RootStackScreenProps<'Home'>) {
           <ListHeaderTitle>{title}</ListHeaderTitle>
         )}
         showsVerticalScrollIndicator={false}
-        fadingEdgeLength={1000}
-        contentContainerStyle={{ paddingBottom: 90 }}
+        fadingEdgeLength={300}
       />
     </Container>
   );

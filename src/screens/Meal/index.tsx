@@ -20,9 +20,11 @@ import {
   ButtonContainer,
 } from './styles';
 import { formatDate } from '@utils/formatDate';
+import { deleteMeal } from '@storage/meals/deleteMeal';
+import { AppError } from '@utils/AppError';
 
 export function Meal({ route, navigation }: RootStackScreenProps<'Meal'>) {
-  // const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const { meal } = route.params;
   const { COLORS } = useTheme();
 
@@ -30,32 +32,26 @@ export function Meal({ route, navigation }: RootStackScreenProps<'Meal'>) {
     navigation.navigate('EditMeal', { meal });
   }
 
-  // function handleRemoveMealWithCustomModal() {
-  //   setModalVisible(true);
-  // }
-
-  // function removeMealWithCustomModal() {
-  //   setModalVisible(false);
-  //   console.log('Excluído');
-  // }
-
-  function handleRemoveMeal() {
-    Alert.alert('Remover', 'Deseja realmente excluir o registro da refeição?', [
-      {
-        style: 'cancel',
-        text: 'Cancelar',
-      },
-      {
-        style: 'default',
-        text: 'Sim, excluir',
-        onPress: () => console.log('Excluído'),
-      },
-    ]);
+  async function handleRemoveMeal(id: string, date: number) {
+    try {
+      await deleteMeal(id, date);
+      setModalVisible(false);
+      navigation.goBack();
+    } catch (error) {
+      if (error instanceof AppError) {
+        Alert.alert('Remover', error.message);
+      } else {
+        console.log(error);
+        Alert.alert('Remover', 'Não foi possível remover a refeição.');
+      }
+    } finally {
+      setModalVisible(false);
+    }
   }
 
   return (
     <Container variant={meal.diet ? 'inDiet' : 'outDiet'}>
-      {/* <Modal
+      <Modal
         animationType='fade'
         transparent={true}
         visible={modalVisible}
@@ -72,11 +68,11 @@ export function Meal({ route, navigation }: RootStackScreenProps<'Meal'>) {
             <Button
               title='Sim ,excluir'
               style={{ marginLeft: 12 }}
-              onPress={removeMealWithCustomModal}
+              onPress={() => handleRemoveMeal(meal.id, meal.date)}
             />
           </ButtonContainer>
         </CustomAlert>
-      </Modal> */}
+      </Modal>
       <Header title='Refeição' variant={meal.diet ? 'inDiet' : 'outDiet'} />
       <Content>
         <Title>{meal.title}</Title>
@@ -104,7 +100,7 @@ export function Meal({ route, navigation }: RootStackScreenProps<'Meal'>) {
           icon={<Trash size={24} color={COLORS['gray-100']} weight='light' />}
           title='Excluir refeição'
           variant='light'
-          onPress={handleRemoveMeal}
+          onPress={() => setModalVisible(true)}
         />
       </Footer>
     </Container>

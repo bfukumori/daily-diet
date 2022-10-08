@@ -39,7 +39,9 @@ export function Statistics({
         <IconContainer onPress={handleGoBack}>
           <StyledIcon variant={diet} />
         </IconContainer>
-        <StyledNumber>{formattedPercentageInDiet}</StyledNumber>
+        <StyledNumber>
+          {totalMeals > 0 ? formattedPercentageInDiet : '0,00%'}
+        </StyledNumber>
         <StyledText>das refeições dentro da dieta</StyledText>
       </Header>
       <Content>

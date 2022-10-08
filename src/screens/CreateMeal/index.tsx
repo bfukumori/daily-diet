@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import {
   Alert,
   KeyboardAvoidingView,
@@ -16,32 +16,36 @@ import { Input } from '@components/Input';
 import { Radio } from '@components/Radio';
 import { Header } from '@components/Header';
 import { formatDate } from '@utils/formatDate';
+import { AppError } from '@utils/AppError';
+import { createNewMeal } from '@storage/meals/createNewMeal';
 
 export function CreateMeal({ navigation }: RootStackScreenProps<'CreateMeal'>) {
   const [mealName, setMealName] = useState('');
   const [mealDescription, setMealDescription] = useState('');
   const [dietOption, setDietOption] = useState<string | null>(null);
-  const [date, setDate] = useState<number | undefined>(new Date().getTime());
+  const [date, setDate] = useState<number>(new Date().getTime());
+
+  const mealId = useId();
 
   function handleDietOption(option: string) {
     setDietOption(option);
   }
 
   function onChange(event: DateTimePickerEvent, selectedDate?: Date) {
-    const formatedDate = selectedDate?.getTime();
+    const formatedDate = selectedDate!.getTime();
     setDate(formatedDate);
   }
 
   function showMode(mode: 'date' | 'time') {
     DateTimePickerAndroid.open({
-      value: new Date(date!),
+      value: new Date(date),
       onChange,
       mode,
       is24Hour: true,
     });
   }
 
-  function handleCreateMeal() {
+  async function handleCreateMeal() {
     if (mealName.trim().length === 0 || mealDescription.trim().length === 0) {
       return Alert.alert('Nova Refeição', 'Preencha o nome e a descrição.');
     }
@@ -52,11 +56,24 @@ export function CreateMeal({ navigation }: RootStackScreenProps<'CreateMeal'>) {
       );
     }
     const newMeal = {
-      mealName,
-      mealDescription,
+      id: mealId,
+      title: mealName,
+      description: mealDescription,
       date: date,
       diet: dietOption === 'Sim' ? true : false,
     };
+
+    try {
+      await createNewMeal(newMeal);
+      navigation.navigate('Home');
+    } catch (error) {
+      if (error instanceof AppError) {
+        Alert.alert('Criar refeição', error.message);
+      } else {
+        console.log(error);
+        Alert.alert('Criar refeição', 'Não foi possível criar a refeição.');
+      }
+    }
 
     navigation.navigate('Feedback', {
       variant: dietOption === 'Sim' ? 'inDiet' : 'outDiet',

@@ -1,8 +1,9 @@
 import styled, { css } from 'styled-components/native';
 import { ButtonType } from '.';
 
-type Props = { variant: ButtonType } & {
+type Props = {
   hasIcon?: boolean;
+  variant: ButtonType;
 };
 
 export const Container = styled.TouchableOpacity<Props>`
@@ -15,6 +16,7 @@ export const Container = styled.TouchableOpacity<Props>`
   `}
   padding: 16px 24px;
   border-radius: 6px;
+  max-height: 50px;
   align-items: center;
   justify-content: center;
   flex-direction: row;
