@@ -1,4 +1,5 @@
 import { StatisticsBoxes } from '@components/StatisticsBoxes';
+import { bestStreakInDiet } from '@utils/bestStreakInDiet';
 import { formatPercentage } from '@utils/formatPercentage';
 import { RootStackScreenProps } from 'src/@types/navigation';
 import {
@@ -18,8 +19,9 @@ export function Statistics({
   navigation,
 }: RootStackScreenProps<'Statistics'>) {
   const { diet, data } = route.params;
-
   const meals = data.map((meal) => meal.data).flat();
+
+  const bestStreak = bestStreakInDiet(meals);
 
   const totalMeals = meals.length;
   const totalMealsInDiet = meals.filter((meal) => meal.diet).length;
@@ -47,7 +49,7 @@ export function Statistics({
       <Content>
         <Title>Estatísticas gerais</Title>
         <StatisticsBoxes
-          value={22}
+          value={bestStreak}
           title='melhor sequência de pratos dentro da dieta'
         />
         <StatisticsBoxes value={totalMeals} title='refeições registradas' />

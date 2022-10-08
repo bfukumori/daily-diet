@@ -91,16 +91,6 @@ export function Home({ navigation }: RootStackScreenProps<'Home'>) {
     }, [])
   );
 
-  // const clearAll = async () => {
-  //   try {
-  //     await AsyncStorage.clear();
-  //   } catch (e) {
-  //     // clear error
-  //   }
-
-  //   console.log('Done.');
-  // };
-  // clearAll();
   return (
     <Container>
       <Header>
