@@ -16,7 +16,7 @@ export const Container = styled.TouchableOpacity<Props>`
   `}
   padding: 16px 24px;
   border-radius: 6px;
-  max-height: 50px;
+  max-height: 60px;
   align-items: center;
   justify-content: center;
   flex-direction: row;

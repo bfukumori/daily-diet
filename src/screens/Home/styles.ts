@@ -15,10 +15,18 @@ export const Header = styled.View`
   padding: 33px 0;
 `;
 
-export const Profile = styled.Image`
+export const ProfileContainer = styled.Pressable`
   width: 40px;
   height: 40px;
   border: 2px solid ${({ theme }) => theme.COLORS['gray-200']};
+  border-radius: 20px;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const Profile = styled.Image`
+  width: 40px;
+  height: 40px;
   border-radius: 20px;
 `;
 

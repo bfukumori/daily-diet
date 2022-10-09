@@ -102,14 +102,14 @@ export function CreateMeal({ navigation }: RootStackScreenProps<'CreateMeal'>) {
                 title='Data'
                 twoColumns
                 onPressIn={() => showMode('date')}
-                defaultValue={formatDate(date!, 'date')}
+                defaultValue={formatDate(date, 'date')}
               />
               <Input
                 title='Hora'
                 twoColumns
                 withLeftMargin
                 onPressIn={() => showMode('time')}
-                defaultValue={formatDate(date!, 'time')}
+                defaultValue={formatDate(date, 'time')}
               />
             </InputContainer>
             <InputContainer>

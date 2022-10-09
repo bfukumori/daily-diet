@@ -1,20 +1,28 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Image, SectionList, Alert } from 'react-native';
 import { useTheme } from 'styled-components/native';
+import { useFocusEffect } from '@react-navigation/native';
+import { Camera, Plus } from 'phosphor-react-native';
+import logo from '@assets/logo.png';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RootStackScreenProps } from 'src/@types/navigation';
 import { formatPercentage } from '@utils/formatPercentage';
-import { Plus } from 'phosphor-react-native';
-import logo from '@assets/logo.png';
-import { Container, Header, ListHeaderTitle, Profile, Title } from './styles';
+import { formatDate } from '@utils/formatDate';
+import { AppError } from '@utils/AppError';
+import { MEAL_COLLECTION } from '@storage/storageConfig';
 import { Statistics } from '@components/Statistics';
 import { Button } from '@components/Button';
 import { ListItem } from '@components/ListItem';
-import { formatDate } from '@utils/formatDate';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { MEAL_COLLECTION } from '@storage/storageConfig';
-import { AppError } from '@utils/AppError';
-import { useFocusEffect } from '@react-navigation/native';
 import { EmptyList } from '@components/EmptyList';
+import {
+  Container,
+  Header,
+  ListHeaderTitle,
+  Profile,
+  ProfileContainer,
+  Title,
+} from './styles';
+import * as ImagePicker from 'expo-image-picker';
 
 export type DietVariant = 'inDiet' | 'outDiet';
 
@@ -34,6 +42,7 @@ export interface DataProps {
 export function Home({ navigation }: RootStackScreenProps<'Home'>) {
   const [data, setData] = useState<DataProps[]>([]);
   const [diet, setDiet] = useState<DietVariant>('inDiet');
+  const [image, setImage] = useState<string | null>(null);
   const { COLORS } = useTheme();
 
   const meals = data.map((meal) => meal.data).flat();
@@ -61,6 +70,18 @@ export function Home({ navigation }: RootStackScreenProps<'Home'>) {
 
   function handleGoToMealScreen(meal: Meal) {
     navigation.navigate('Meal', { meal });
+  }
+
+  async function handlePickProfileImage() {
+    const profileImg = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (!profileImg.cancelled) {
+      setImage(profileImg.uri);
+    }
   }
 
   useEffect(() => {
@@ -95,11 +116,17 @@ export function Home({ navigation }: RootStackScreenProps<'Home'>) {
     <Container>
       <Header>
         <Image source={logo} />
-        <Profile
-          source={{
-            uri: 'https://github.com/bfukumori.png',
-          }}
-        />
+        <ProfileContainer onPress={handlePickProfileImage}>
+          {image ? (
+            <Profile
+              source={{
+                uri: { image },
+              }}
+            />
+          ) : (
+            <Camera />
+          )}
+        </ProfileContainer>
       </Header>
       <Statistics
         value={totalMeals > 0 ? formattedPercentageInDiet : '0,00%'}
