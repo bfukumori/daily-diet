@@ -13,7 +13,7 @@
     <img alt="Stargazers" src="https://img.shields.io/github/stars/bfukumori/daily-diet?style=social">
   </a>
 
-  <a href="">
+  <a href="https://expo.dev/accounts/bfukumori/projects/daily-diet/builds/2715fcb3-9e72-4297-b7d8-717f55c09dce">
     <img alt="daily-diet" src="https://img.shields.io/badge/daily-diet-%237159c1?style=flat&logo=ghost">
   </a>
 </p>
